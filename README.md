@@ -1,20 +1,58 @@
-<div align="center">
-<img width="1200" height="475" alt="GHBanner" src="https://ai.google.dev/static/site-assets/images/share-ais-513315318.png" />
-</div>
+# ⏱️ Timeverse
 
-# Run and deploy your AI Studio app
+**하나의 스톱워치, 무한한 경험.** 밋밋한 타이머를 감각적인 "시간의 레시피"로 바꾸는 모바일 우선 스톱워치입니다.
 
-This contains everything you need to run your app locally.
+시간을 단순한 숫자가 아니라 단계별 리튜얼로 경험하게 합니다 — 커피 추출, 요리, 명상, 공부, 그리고 컵라면 3분까지. 각 단계가 끝나면 카운트다운과 신호음이 다음 단계로 안내합니다.
 
-View your app in AI Studio: https://ai.studio/apps/30695a5a-300f-49c3-a584-2e24527ab973
+## ✨ 주요 기능
 
-## Run Locally
+- **아날로그 + 디지털 스톱워치** — 부드럽게 스윕하는 초침(60fps)과 큼직한 디지털 판독
+- **시간 페르소나 9종** — 일반 · 바리스타 · 요리 · 육아 · 코치 · 집중 · 명상 · 퀀텀 · 미니멀. 전환하면 비주얼 · 사운드 · 버튼 라벨이 함께 바뀝니다.
+- **시간의 레시피** — 단계별 가이드와 **다음 단계까지 카운트다운 + 3·2·1 전환 신호음**
+  - 전문가 레시피(제임스 호프만 V60, 스테이크, 뽀모도로 등)
+  - 일상 레시피(컵라면 3분, 반숙 계란, 홍차 우리기)
+- **나만의 레시피 빌더** — 단계 이름 · 설명 · 지속 시간만 입력하면 나만의 리튜얼 완성 (localStorage에 저장)
+- **절차적 합성 사운드** — 오디오 파일 없이 Web Audio로 페르소나별 사운드를 생성하고, 마스터 버스(리버브 + 컴프레서)로 공간감을 입힘
+- **기록(로그북)** — 완료한 세션을 저장하고 제목 · 메모를 편집. 모두 localStorage에 영구 저장
 
-**Prerequisites:**  Node.js
+## 🚀 로컬 실행
 
+**필요 사항:** Node.js
 
-1. Install dependencies:
-   `npm install`
-2. Set the `GEMINI_API_KEY` in [.env.local](.env.local) to your Gemini API key
-3. Run the app:
-   `npm run dev`
+```bash
+npm install
+npm run dev
+```
+
+→ http://localhost:3000
+
+> API 키나 외부 서비스가 필요 없습니다. 100% 로컬에서 동작합니다.
+
+## 🏗️ 빌드
+
+```bash
+npm run build   # 프론트엔드(dist) + 서버 번들
+npm start       # 프로덕션 서버 실행
+```
+
+## 🧱 기술 스택
+
+- **React 19** + **TypeScript**
+- **Vite 6** (개발 서버는 Express + Vite 미들웨어)
+- **Tailwind CSS 4**
+- **Web Audio API** (사운드 합성)
+- **lucide-react** (아이콘)
+
+## 📁 구조
+
+```
+src/
+  App.tsx                    # 메인 단일 화면 UI + 상태
+  data.ts                    # 페르소나 · 레시피 데이터
+  types.ts                   # 타입 정의
+  components/
+    VisualMetaphor.tsx       # 페르소나별 시각 메타포(아날로그 시계 포함)
+  lib/
+    soundService.ts          # Web Audio 사운드 엔진
+server.ts                    # Express + Vite 정적 서빙
+```

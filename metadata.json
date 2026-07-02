@@ -1,6 +1,6 @@
 {
   "name": "Timeverse",
-  "description": "One Stopwatch. Infinite Experiences. A revolutionary Time Experience Platform transforming standard timers into bespoke sensory rituals with AI Coaching and custom Time Recipes.",
+  "description": "One Stopwatch. Infinite Experiences. A mobile-first stopwatch that turns plain timers into sensory, step-by-step Time Recipes with countdown cues and synthesized audio.",
   "requestFramePermissions": [],
-  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+  "majorCapabilities": []
 }

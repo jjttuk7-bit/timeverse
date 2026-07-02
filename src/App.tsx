@@ -23,6 +23,7 @@ import {
   Trash2,
   Wand2,
   Pencil,
+  Download,
 } from "lucide-react";
 import { PersonaId, TimeRecipe, TimeSession, Milestone } from "./types";
 import { DEFAULT_PERSONAS, DEFAULT_RECIPES } from "./data";
@@ -111,6 +112,9 @@ export default function App() {
   const [showHistory, setShowHistory] = useState(false);
   const [showBuilder, setShowBuilder] = useState(false);
 
+  // PWA install prompt
+  const [installEvt, setInstallEvt] = useState<any>(null);
+
   // History note editing
   const [editingId, setEditingId] = useState<string | null>(null);
   const [draftTitle, setDraftTitle] = useState("");
@@ -142,6 +146,44 @@ export default function App() {
       /* ignore */
     }
   }, [customRecipes]);
+
+  // Listen for the PWA install prompt (may have fired before React mounted → read the stashed one)
+  useEffect(() => {
+    const pick = () => {
+      const stashed = (window as any).__deferredInstall;
+      if (stashed) setInstallEvt(stashed);
+    };
+    pick();
+    const onBIP = (e: any) => {
+      e.preventDefault();
+      (window as any).__deferredInstall = e;
+      setInstallEvt(e);
+    };
+    const onInstalled = () => {
+      (window as any).__deferredInstall = null;
+      setInstallEvt(null);
+    };
+    window.addEventListener("beforeinstallprompt", onBIP);
+    window.addEventListener("bip-ready", pick);
+    window.addEventListener("appinstalled", onInstalled);
+    return () => {
+      window.removeEventListener("beforeinstallprompt", onBIP);
+      window.removeEventListener("bip-ready", pick);
+      window.removeEventListener("appinstalled", onInstalled);
+    };
+  }, []);
+
+  const handleInstall = async () => {
+    if (!installEvt) return;
+    installEvt.prompt();
+    try {
+      await installEvt.userChoice;
+    } catch {
+      /* ignore */
+    }
+    (window as any).__deferredInstall = null;
+    setInstallEvt(null);
+  };
 
   const currentPersona = useMemo(
     () => DEFAULT_PERSONAS.find((p) => p.id === activePersonaId) || DEFAULT_PERSONAS[0],
@@ -441,6 +483,16 @@ export default function App() {
           <h1 className="text-sm font-display font-extrabold tracking-tight uppercase">TIMEVERSE</h1>
         </div>
         <div className="flex items-center gap-1.5">
+          {installEvt && (
+            <button
+              onClick={handleInstall}
+              className="flex items-center gap-1.5 pl-2 pr-3 py-2 rounded-full bg-white text-black text-xs font-bold active:scale-95 transition"
+              title="앱 설치"
+            >
+              <Download className="w-4 h-4" />
+              설치
+            </button>
+          )}
           <button
             onClick={handleToggleMute}
             className="p-2 rounded-full bg-white/5 border border-white/10 active:scale-95 transition"

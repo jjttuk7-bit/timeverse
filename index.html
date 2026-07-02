@@ -21,6 +21,14 @@
   </head>
   <body class="bg-[#0f131a] text-slate-100 overflow-x-hidden">
     <div id="root"></div>
+    <script>
+      // Capture the install prompt early so the in-app install button can trigger it later.
+      window.addEventListener("beforeinstallprompt", function (e) {
+        e.preventDefault();
+        window.__deferredInstall = e;
+        window.dispatchEvent(new Event("bip-ready"));
+      });
+    </script>
     <script type="module" src="/src/main.tsx"></script>
   </body>
 </html>
